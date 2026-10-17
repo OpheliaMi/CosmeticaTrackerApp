@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="MainController">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="Меню">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Добавить продукт" />
+                                <MenuItem mnemonicParsing="false" text="Сохранить" />
+                                <MenuItem mnemonicParsing="false" text="Выход" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Темы">
+                            <items>
+                                <Menu mnemonicParsing="false" text="Пастельные темы 🌸">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#setRainbowTheme" text="Нежная радуга 🌈" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setPinkTheme" text="Клубничный йогурт 🍓" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setVintageTheme" text="Джинсовый винтаж 👖" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setCottonTheme" text="Сладкая вата 🍧" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setWinterTheme" text="Зимний вечер ❄️" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setGhostTheme" text="Эльфийский замок 👻" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Неон и Готика ⚡">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#setCyberTheme" text="Киберпанк Сеул 🌆" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSambucusTheme" text="Ночной Sambucus 🌌" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setMintTheme" text="Мятный неон 🧪" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setViperTheme" text="Чешуя змеи 🐍" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSucculentTheme" text="Свежая суккулента 🪴" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setBeetleTheme" text="Голографический жук 🪲" />
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Spooky Halloween 🎃">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#setSamhainTheme" text="Самайн 🎃" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setHalloweenTheme" text="Полночный Хэллоуин 🦇" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSyrupTheme" text="Тыквенный сироп 🕸️" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSpookyTheme" text="Жуткая ночь 🧙‍♀️" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setShimmerTheme" text="Чёрный шиммер ✨" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setMistTheme" text="Призрачный туман 🌫️" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setPurpleTheme" text="Королевский пурпур 👑" />
+                                    </items>
+                                </Menu>
+
+                                <!-- 🌟 НОВОЕ МЕНЮ НАСТРОЙКИ ШРИФТОВ -->
+                                <Menu mnemonicParsing="false" text="Шрифты">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontCustom" text="Ведминский кастом 🔮" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontModern" text="Современный бьюти 🌸" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontSystem" text="Классический стандарт 💻" />
+                                    </items>
+                                </Menu>
+
+                                <!-- 🌟 НОВОЕ МЕНЮ НАСТРОЙКИ РАЗМЕРОВ -->
+                                <Menu mnemonicParsing="false" text="Размер текста">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#setSizeSmall" text="Мелкий 🔍" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSizeMedium" text="Средний ✨" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setSizeLarge" text="Крупный 🔎" />
+                                    </items>
+                                </Menu>
+                            </items>
+                        </Menu>
+                    </menus>
+
+                </MenuBar>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab text="Всё"><content><TableView fx:id="tableAll"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Тени"><content><TableView fx:id="tableShadows"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Контуринг"><content><TableView fx:id="tableContour"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Хайлайтеры"><content><TableView fx:id="tableHighlighters"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Румяна"><content><TableView fx:id="tableBlush"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Помады"><content><TableView fx:id="tableLipsticks"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+                <Tab text="Иное"><content><TableView fx:id="tableOther"><columns><TableColumn prefWidth="80.0" text="фото" /><TableColumn prefWidth="150.0" text="название" /><TableColumn prefWidth="120.0" text="годен до:" /><TableColumn prefWidth="250.0" text="комент" /><TableColumn prefWidth="120.0" text="действия" /></columns><columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy></TableView></content></Tab>
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>
