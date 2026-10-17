@@ -18,9 +18,9 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="Меню">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Добавить продукт" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleAddProduct" text="Добавить продукт" />
                                 <MenuItem mnemonicParsing="false" text="Сохранить" />
-                                <MenuItem mnemonicParsing="false" text="Выход" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Выход" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Темы">
@@ -60,9 +60,9 @@
                                 <!-- 🌟 НОВОЕ МЕНЮ НАСТРОЙКИ ШРИФТОВ -->
                                 <Menu mnemonicParsing="false" text="Шрифты">
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#setFontCustom" text="Ведминский кастом 🔮" />
-                                        <MenuItem mnemonicParsing="false" onAction="#setFontModern" text="Современный бьюти 🌸" />
-                                        <MenuItem mnemonicParsing="false" onAction="#setFontSystem" text="Классический стандарт 💻" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontCustom" text="Пиксельная готика (Consolas) 🔮" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontModern" text="Код Красоты (Courier New) 📜" />
+                                        <MenuItem mnemonicParsing="false" onAction="#setFontSystem" text="Минимализм (Lucida Console) 💻" />
                                     </items>
                                 </Menu>
 

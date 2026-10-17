@@ -1,204 +1,177 @@
 /* ==========================================================================
-   1. ИМПОРТ ДОПОЛНИТЕЛЬНЫХ ШРИФТОВ ИЗ GOOGLE FONTS
+   1. ОБЩИЕ СТИЛИ И БАЗОВЫЕ НАСТРОЙКИ СТРУКТУРЫ
    ========================================================================== */
-@import url('https://googleapis.com');
-
 .root {
     -fx-background-color: #ffffff;
 }
 
 /* ==========================================================================
-   A. МОДИФИКАТОРЫ ШРИФТОВ (УПРАВЛЯЮТСЯ ИЗ JAVA)
+   2. МОДИФИКАТОРЫ СИСТЕМНЫХ МОНОШИРИННЫХ ШРИФТОВ И ГЛАВНАЯ ПАНЕЛЬ
    ========================================================================== */
 
-/* Вариант 1: Твой крутой кастомный шрифт */
-.font-custom { -fx-font-family: "Senotakaiguriddo", sans-serif; }
-.font-custom .menu-bar .menu .label,
-.font-custom .tab .tab-label,
-.font-custom .table-view .column-header .label {
-    -fx-font-family: "Tagesschrift Cyrillic", sans-serif;
-    -fx-font-weight: bold;
+/* Базовые стили для шрифтов */
+.font-custom, .font-custom .menu-bar .menu .label, .font-custom .tab .tab-label, .font-custom .table-view .column-header .label, .font-custom .table-view .table-cell { -fx-font-family: "Consolas", "Monaco", monospace; }
+.font-modern, .font-modern .menu-bar .menu .label, .font-modern .tab .tab-label, .font-modern .table-view .column-header .label, .font-modern .table-view .table-cell { -fx-font-family: "Courier New", "Courier", monospace; -fx-font-weight: bold; }
+.font-system, .font-system .menu-bar .menu .label, .font-system .tab .tab-label, .font-system .table-view .column-header .label, .font-system .table-view .table-cell { -fx-font-family: "Lucida Console", "Monaco", monospace; }
+
+/* Настройка верхней панели меню (MenuBar) */
+.menu-bar {
+    -fx-background-color: #ffffff !important; /* Всегда белый фон панели */
+    -fx-border-color: #f2ebeb !important;
+    -fx-border-width: 0 0 1 0 !important;
+    -fx-padding: 8 15 8 15 !important;
 }
 
-/* Вариант 2: Современный Montserrat + Inter */
-.font-modern { -fx-font-family: "Inter", sans-serif; }
-.font-modern .menu-bar .menu .label,
-.font-modern .tab .tab-label,
-.font-modern .table-view .column-header .label {
-    -fx-font-family: "Montserrat", sans-serif;
-    -fx-font-weight: bold;
+.menu-bar .menu {
+    -fx-background-color: transparent !important;
+    -fx-background-radius: 6 !important;
+    -fx-padding: 6 12 6 12 !important;
 }
 
-/* Вариант 3: Стандартный системный */
-.font-system { -fx-font-family: "Segoe UI", sans-serif; }
-.font-system .menu-bar .menu .label,
-.font-system .tab .tab-label,
-.font-system .table-view .column-header .label {
-    -fx-font-family: "Segoe UI", sans-serif;
-    -fx-font-weight: bold;
+/* 🛑 ФИКС: Текст главных кнопок панели в обычном состоянии (Всегда тёмно-серый) */
+.menu-bar .menu .label {
+    -fx-text-fill: #3a3a3a !important;
+    -fx-font-weight: bold !important;
 }
+
+/* 🛑 ФИКС: Поведение текста главных кнопок («Меню», «Темы»...) ПРИ НАВЕДЕНИИ МЫШИ! */
+.menu-bar .menu:hover,
+.menu-bar .menu:focused,
+.menu-bar .menu:showing {
+    -fx-background-color: #fff0f2 !important; /* Мягкая розовая подложка */
+}
+
+/* Принудительно делаем текст бордовым при наведении во всех 19 темах, чтобы он не исчезал! */
+.menu-bar .menu:hover .label,
+.menu-bar .menu:focused .label,
+.menu-bar .menu:showing .label {
+    -fx-text-fill: #a04d5a !important; /* Красивый контрастный цвет */
+    -fx-font-weight: bold !important;
+}
+
 
 /* ==========================================================================
-   B. МОДИФИКАТОРЫ РАЗМЕРОВ ТЕКСТА (НЕЗАВИСИМЫЕ)
+   3. МОДИФИКАТОРЫ РАЗМЕРОВ ТЕКСТА (ЖЁСТКИЙ КОНТРОЛЬ МАСШТАБА ТАБЛИЦ) 🔎
    ========================================================================== */
 
-/* Мелкий размер */
-.size-small { -fx-font-size: 11px; }
-.size-small .menu-bar .menu .label { -fx-font-size: 13px; }
-.size-small .tab .tab-label { -fx-font-size: 12px; }
+/* --- Мелкий размер --- */
+.size-small { -fx-font-size: 13px; }
+.size-small .menu-bar .menu .label { -fx-font-size: 14px; }
+.size-small .tab .tab-label { -fx-font-size: 13px; }
+.size-small .table-view .column-header .label,
+.size-small .table-view .table-cell { -fx-font-size: 13px !important; }
 
-/* Средний размер (Стандартный) */
-.size-medium { -fx-font-size: 13px; }
-.size-medium .menu-bar .menu .label { -fx-font-size: 15px; }
-.size-medium .tab .tab-label { -fx-font-size: 14px; }
+/* --- Средний размер (Стандартный по умолчанию - теперь крупный и четкий!) --- */
+.size-medium { -fx-font-size: 16px; }
+.size-medium .menu-bar .menu .label { -fx-font-size: 17px; }
+.size-medium .tab .tab-label { -fx-font-size: 16px; }
+.size-medium .table-view .column-header .label,
+.size-medium .table-view .table-cell { -fx-font-size: 16px !important; }
 
-/* Крупный размер */
-.size-large { -fx-font-size: 15px; }
-.size-large .menu-bar .menu .label { -fx-font-size: 18px; }
-.size-large .tab .tab-label { -fx-font-size: 17px; }
+/* --- Крупный размер --- */
+.size-large { -fx-font-size: 19px; }
+.size-large .menu-bar .menu .label { -fx-font-size: 21px; }
+.size-large .tab .tab-label { -fx-font-size: 19px; }
+.size-large .table-view .column-header .label,
+.size-large .table-view .table-cell { -fx-font-size: 19px !important; }
 
 /* ==========================================================================
-   2. ВЫПАДАЮЩИЕ КОНТЕКСТНЫЕ СПИСКИ И СТРЕЛОЧКИ ПОДМЕНЮ (ИСПРАВЛЕНО)
+   4. ИНТЕРФЕЙСНЫЕ МЕНЮ И ВЫПАДАЮЩИЕ СПИСКИ (ФИКС ИСЧЕЗАЮЩЕГО ТЕКСТА!) 🌸
    ========================================================================== */
-.context-menu {
+.menu-bar {
     -fx-background-color: #ffffff;
-    -fx-border-color: #e2d9d9;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
-    -fx-padding: 4 0 4 0;
+    -fx-border-color: #f2ebeb;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8 15 8 15;
 }
 
-.menu-item {
-    -fx-padding: 6 20 6 15;
+.menu-bar .menu {
     -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-padding: 6 12 6 12;
 }
 
-.context-menu .menu-item .label {
+/* Выпадающие контекстные окошки (для всех 19 тем они ВСЕГДА светлые и аккуратные) */
+.context-menu {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #e2d9d9 !important;
+    -fx-border-radius: 8 !important;
+    -fx-background-radius: 8 !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4) !important;
+    -fx-padding: 4 0 4 0 !important;
+}
+
+/* Строчки внутри выпадающего списка в обычном состоянии */
+.menu-item {
+    -fx-padding: 6 20 6 15 !important;
+    -fx-background-color: transparent !important;
+}
+
+/* Текст пунктов меню — ПРИНУДИТЕЛЬНО делаем тёмным во всех темах, чтобы он не исчезал! 🛑 */
+.context-menu .menu-item .label,
+.context-menu .menu-item:focused .label {
     -fx-text-fill: #333333 !important;
-    -fx-font-size: 13px;
-    -fx-font-weight: normal;
+    -fx-font-size: inherit;
 }
 
-.context-menu .menu-item:hover {
-    -fx-background-color: #f5eded !important;
+/* Эффект, когда мы наводим мышку на пункт меню («Клубничный йогурт» и др.) */
+.context-menu .menu-item:hover,
+.context-menu .menu-item:focused {
+    -fx-background-color: #f5eded !important; /* Приятная розовая подсветка */
 }
 
-.context-menu .menu-item:hover .label {
-    -fx-text-fill: #000000 !important;
-    -fx-font-weight: bold;
+/* Цвет текста активного пункта при наведении — ПРИНУДИТЕЛЬНО тёмно-бордовый */
+.context-menu .menu-item:hover .label,
+.context-menu .menu-item:focused .label {
+    -fx-text-fill: #a04d5a !important;
+    -fx-font-weight: bold !important;
 }
 
-/* Настройка стрелочек подменю */
+/* Настройка стрелочек-индикаторов подменю */
 .context-menu .menu-item .left-container,
 .context-menu .menu-item .right-container {
-    -fx-background-color: transparent;
+    -fx-background-color: transparent !important;
 }
 
 .context-menu .menu-item .right-container .arrow {
-    -fx-background-color: #666666 !important;
-    -fx-shape: "M 0 0 L 4 4 L 0 8 Z";
+    -fx-background-color: #666666 !important; /* Серый цвет стрелочки */
+    -fx-shape: "M 0 0 L 4 4 L 0 8 Z" !important;
 }
 
+/* Меняем цвет стрелочки при наведении */
 .context-menu .menu-item:hover .right-container .arrow {
     -fx-background-color: #a04d5a !important;
 }
 
-/* 🛑 ПОЛНОСТЬЮ УБРАЛИ СТАРОЕ СМЕЩЕНИЕ, ТЕПЕРЬ ПОДМЕНЮ ОТКРЫВАЕТСЯ РОВНО СБОКУ */
+/* Идеальные отступы для раскрывающихся сбоку подменю */
 .context-menu .context-menu {
     -fx-translate-x: 0 !important;
     -fx-translate-y: 0 !important;
 }
 
-/* ==========================================================================
-   3. ПАНЕЛЬ ВКЛАДОК (TAB PANE)
-   ========================================================================== */
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #f2ebeb;
-    -fx-border-width: 0 0 1 0;
+/* Полное выкашивание синей обводки фокуса */
+.tab:focused, .tab-pane:focused, .table-view:focused, .root:focused {
+    -fx-focus-color: transparent !important;
+    -fx-faint-focus-color: transparent !important;
 }
 
-.tab-pane .tab-header-area {
-    -fx-padding: 12 15 0 15;
-}
-
-/* Базовый стиль для всех вкладок */
-.tab {
-    -fx-background-color: #f2eded;
-    -fx-background-radius: 8 8 0 0;
-    -fx-padding: 8 16 8 16;
-    -fx-margin: 0 2 0 0;
-    -fx-border-color: #f2ebeb;
-    -fx-border-width: 1 1 0 1;
-}
-
-/* 🛑 УБИРАЕМ СИНЮЮ ОБВОДКУ ФОКУСА ДЛЯ ВКЛАДОК И ДЛЯ ВСЕХ ОСТАЛЬНЫХ ЭЛЕМЕНТОВ Приложения */
-.tab:focused,
-.tab-pane:focused,
-.table-view:focused,
-.root:focused {
-    -fx-focus-color: transparent !important;         /* Убираем синий цвет фокуса */
-    -fx-faint-focus-color: transparent !important;   /* Убираем внешнее синее свечение */
-}
-
-.tab .tab-label {
-    -fx-text-fill: #666666;
-    -fx-font-weight: bold;
-    -fx-font-size: 13px;
-}
-
-.tab:hover {
-    -fx-background-color: #e5dede;
-}
-
-.tab:selected .tab-label {
-    -fx-text-fill: #2b2526;
-    -fx-font-weight: bold;
-}
 
 /* ==========================================================================
-   4. ТАБЛИЦЫ (TABLE VIEW) - КАРКАС И УДАЛЕНИЕ БЕЛЫХ ПЯТЕН
+   5. ВИНТАЖНАЯ ПАНЕЛЬ ВКЛАДОК И СТИЛИЗАЦИЯ ТАБЛИЦ
    ========================================================================== */
-.table-view {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 10;
-}
-
-/* Затираем дефолтную белую подложку ячеек и фона пустой таблицы */
-.table-view .virtual-flow,
-.table-view .placeholder {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header {
-    -fx-border-width: 0 0 2 0;
-    -fx-size: 40;
-}
-
-.table-view .column-header .label {
-    -fx-font-weight: bold;
-    -fx-font-size: 13px;
-}
-
-.table-row-cell {
-    -fx-border-width: 0 0 1 0;
-    -fx-padding: 6;
-}
-
-.table-view .placeholder .label {
-    -fx-font-style: italic;
-    -fx-font-size: 14px;
-}
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: #ffffff; -fx-border-color: #f2ebeb; -fx-border-width: 0 0 1 0; }
+.tab-pane .tab-header-area { -fx-padding: 12 15 0 15; }
+.tab { -fx-background-color: #f2eded; -fx-background-radius: 8 8 0 0; -fx-padding: 8 16 8 16; -fx-margin: 0 2 0 0; -fx-border-color: #f2ebeb; -fx-border-width: 1 1 0 1; }
+.table-view { -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 10; }
+.table-view .virtual-flow, .table-view .placeholder { -fx-background-color: transparent; }
+.table-view .column-header { -fx-border-width: 0 0 2 0; -fx-size: 45; }
+.table-row-cell { -fx-border-width: 0 0 1 0; -fx-padding: 8; -fx-min-height: 45px; }
+.table-view .placeholder .label { -fx-font-style: italic; }
 
 /* ==========================================================================
-   5. ОПРЕДЕЛЕНИЕ 19 ТЕМ ОФОРМЛЕНИЯ (КЛАССЫ-МОДИФИКАТОРЫ)
+   6. РЕАЛИЗАЦИЯ 19 ТЕМ ОФОРМЛЕНИЯ
    ========================================================================== */
-
-/* --- 🌸 СВЕТЛЫЙ / ПАСТЕЛЬНЫЙ БЛОК --- */
-
-/* 1. Нежная радуга 🌈 */
+/* --- ПАСТЕЛЬНЫЙ БЛОК --- */
 .theme-rainbow .tab:selected { -fx-background-color: #ffccd5; }
 .theme-rainbow .tab:selected:tab-index0 { -fx-background-color: #ffadad; }
 .theme-rainbow .table-view .column-header { -fx-background-color: #ffffff; -fx-border-color: #f7eded; }
@@ -206,9 +179,7 @@
 .theme-rainbow .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #faf5f5; }
 .theme-rainbow .table-row-cell:hover { -fx-background-color: #fffcfc; }
 .theme-rainbow .table-row-cell:filled:selected { -fx-background-color: #f5f0f1; }
-.theme-rainbow .table-view .placeholder .label { -fx-text-fill: #b5a4a6; }
 
-/* 2. Клубничный йогурт 🍓 */
 .theme-pink .tab:selected { -fx-background-color: #ffc2d1; }
 .theme-pink .tab:selected:tab-index0 { -fx-background-color: #ffb3c6; }
 .theme-pink .table-view .column-header { -fx-background-color: #fff5f7; -fx-border-color: #ffe5ec; }
@@ -216,9 +187,7 @@
 .theme-pink .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #fff5f7; }
 .theme-pink .table-row-cell:hover { -fx-background-color: #fff0f3; }
 .theme-pink .table-row-cell:filled:selected { -fx-background-color: #ffe5ec; }
-.theme-pink .table-view .placeholder .label { -fx-text-fill: #fb6f92; }
 
-/* 3. Джинсовый винтаж 👖 */
 .theme-vintage .tab:selected { -fx-background-color: #d3cedf; }
 .theme-vintage .tab:selected:tab-index0 { -fx-background-color: #f2d7d9; }
 .theme-vintage .table-view .column-header { -fx-background-color: #ffffff; -fx-border-color: #d3cedf; }
@@ -226,75 +195,37 @@
 .theme-vintage .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #f7f5f8; }
 .theme-vintage .table-row-cell:hover { -fx-background-color: #f7f5f8; }
 .theme-vintage .table-row-cell:filled:selected { -fx-background-color: #d3cedf; }
-.theme-vintage .table-view .placeholder .label { -fx-text-fill: #748da6; }
 
-/* 4. Сладкая вата 🍧 */
-.theme-cotton .tab:selected { -fx-background-color: #ffc1da; }
-.theme-cotton .tab:selected:tab-index0 { -fx-background-color: #ff90bb; }
-.theme-cotton .table-view .column-header { -fx-background-color: #f8f8e1; -fx-border-color: #ffc1da; }
-.theme-cotton .table-view .column-header .label { -fx-text-fill: #ff90bb; }
-.theme-cotton .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #fbf5f8; }
-.theme-cotton .table-row-cell:hover { -fx-background-color: #fbf5f8; }
-.theme-cotton .table-row-cell:filled:selected { -fx-background-color: #ffc1da; }
-.theme-cotton .table-view .placeholder .label { -fx-text-fill: #ff90bb; }
-
-/* 5. Зимний вечер ❄️ */
-.theme-winter .tab:selected { -fx-background-color: #ffeaea; }
-.theme-winter .tab:selected:tab-index0 { -fx-background-color: #f5cbcb; }
-.theme-winter .table-view .column-header { -fx-background-color: #ffffff; -fx-border-color: #ffeaea; }
-.theme-winter .table-view .column-header .label { -fx-text-fill: #748dae; }
-.theme-winter .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #fbf8f8; }
-.theme-winter .table-row-cell:hover { -fx-background-color: #fbf8f8; }
-.theme-winter .table-row-cell:filled:selected { -fx-background-color: #ffeaea; }
-.theme-winter .table-view .placeholder .label { -fx-text-fill: #748dae; }
-
-/* 6. Эльфийский замок 👻 */
-.theme-ghost .tab:selected { -fx-background-color: #877ebf; }
-.theme-ghost .tab:selected:tab-index0 { -fx-background-color: #f28963; }
-.theme-ghost .table-view .column-header { -fx-background-color: #a569bf; -fx-border-color: #877ebf; }
-.theme-ghost .table-view .column-header .label { -fx-text-fill: #ffffff; }
-.theme-ghost .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #fcf4f7; }
-.theme-ghost .table-row-cell:hover { -fx-background-color: #fcf4f7; }
-.theme-ghost .table-row-cell:filled:selected { -fx-background-color: #96a0d9; }
-.theme-ghost .table-view .placeholder .label { -fx-text-fill: #877ebf; }
-
-
-/* --- ⚡ ОБЩАЯ СТРУКТУРА ДЛЯ ВСЕХ ТЁМНЫХ И ГОТИЧНЫХ ТЕМ (Удаление белых пятен) --- */
+/* --- ТЁМНЫЙ БЛОК (Авто-удаление белых пятен) --- */
 .theme-cyber, .theme-sambucus, .theme-mint, .theme-viper, .theme-succulent, .theme-beetle,
 .theme-samhain, .theme-halloween, .theme-syrup, .theme-spooky, .theme-shimmer, .theme-mist, .theme-purple {
     -fx-background-color: #121212;
 }
 .theme-cyber .menu-bar, .theme-sambucus .menu-bar, .theme-mint .menu-bar, .theme-viper .menu-bar, .theme-succulent .menu-bar, .theme-beetle .menu-bar,
 .theme-samhain .menu-bar, .theme-halloween .menu-bar, .theme-syrup .menu-bar, .theme-spooky .menu-bar, .theme-shimmer .menu-bar, .theme-mist .menu-bar, .theme-purple .menu-bar {
-    -fx-background-color: #121212;
-    -fx-border-color: #2a2a2a;
+    -fx-background-color: #121212; -fx-border-color: #2a2a2a;
 }
-.theme-cyber .tab-pane .tab-header-area .tab-header-background, .theme-sambucus .tab-pane .tab-header-area .tab-header-background, .theme-mint .tab-pane .tab-header-area .tab-header-background, .theme-viper .tab-pane .tab-header-area .tab-header-background, .theme-succulent .tab-pane .tab-header-area .tab-header-background, .theme-beetle .tab-pane .tab-header-area .tab-header-background,
-.theme-samhain .tab-pane .tab-header-area .tab-header-background, .theme-halloween .tab-pane .tab-header-area .tab-header-background, .theme-syrup .tab-pane .tab-header-area .tab-header-background, .theme-spooky .tab-pane .tab-header-area .tab-header-background, .theme-shimmer .tab-pane .tab-header-area .tab-header-background, .theme-mist .tab-pane .tab-header-area .tab-header-background, .theme-purple .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #121212;
-    -fx-border-color: #2a2a2a;
+.theme-cyber .tab-header-background, .theme-sambucus .tab-header-background, .theme-mint .tab-header-background, .theme-viper .tab-header-background, .theme-succulent .tab-header-background, .theme-beetle .tab-header-background,
+.theme-samhain .tab-header-background, .theme-halloween .tab-header-background, .theme-syrup .tab-header-background, .theme-spooky .tab-header-background, .theme-shimmer .tab-header-background, .theme-mist .tab-header-background, .theme-purple .tab-header-background {
+    -fx-background-color: #121212; -fx-border-color: #2a2a2a;
 }
 .theme-cyber .tab, .theme-sambucus .tab, .theme-mint .tab, .theme-viper .tab, .theme-succulent .tab, .theme-beetle .tab,
 .theme-samhain .tab, .theme-halloween .tab, .theme-syrup .tab, .theme-spooky .tab, .theme-shimmer .tab, .theme-mist .tab, .theme-purple .tab {
--fx-background-color: #222222;
--fx-border-color: #121212;
+    -fx-background-color: #222222; -fx-border-color: #121212;
 }
-/* Перекрашиваем контейнер самой таблицы в цвет окна темы, убирая белые пятна /
 .theme-cyber .table-view, .theme-sambucus .table-view, .theme-mint .table-view, .theme-viper .table-view, .theme-succulent .table-view, .theme-beetle .table-view,
 .theme-samhain .table-view, .theme-halloween .table-view, .theme-syrup .table-view, .theme-spooky .table-view, .theme-shimmer .table-view, .theme-mist .table-view, .theme-purple .table-view {
--fx-background-color: #121212;
+    -fx-background-color: #121212;
 }
 .theme-cyber .table-row-cell, .theme-sambucus .table-row-cell, .theme-mint .table-row-cell, .theme-viper .table-row-cell, .theme-succulent .table-row-cell, .theme-beetle .table-row-cell,
 .theme-samhain .table-row-cell, .theme-halloween .table-row-cell, .theme-syrup .table-row-cell, .theme-spooky .table-row-cell, .theme-shimmer .table-row-cell, .theme-mist .table-row-cell, .theme-purple .table-row-cell {
--fx-background-color: #1a1a1a;
--fx-border-color: #2a2a2a;
--fx-text-fill: #ffffff;
+    -fx-background-color: #1a1a1a; -fx-border-color: #2a2a2a;
 }
 .theme-cyber .table-row-cell .text, .theme-sambucus .table-row-cell .text, .theme-mint .table-row-cell .text, .theme-viper .table-row-cell .text, .theme-succulent .table-row-cell .text, .theme-beetle .table-row-cell .text,
 .theme-samhain .table-row-cell .text, .theme-halloween .table-row-cell .text, .theme-syrup .table-row-cell .text, .theme-spooky .table-row-cell .text, .theme-shimmer .table-row-cell .text, .theme-mist .table-row-cell .text, .theme-purple .table-row-cell .text {
--fx-fill: #ffffff; / Текст строк становится белым */
+    -fx-fill: #ffffff;
 }
-/* 7. Киберпанк Сеул 🌆 */
+
 .theme-cyber { -fx-background-color: #021826; }
 .theme-cyber .table-view { -fx-background-color: #021826; }
 .theme-cyber .menu-bar .menu .label { -fx-text-fill: #06f284; }
@@ -302,60 +233,6 @@
 .theme-cyber .tab:selected:tab-index0 { -fx-background-color: #eaf405; }
 .theme-cyber .table-view .column-header { -fx-background-color: #01595a; -fx-border-color: #06f284; }
 .theme-cyber .table-view .column-header .label { -fx-text-fill: #9bff6c; }
-/* 8. Ночной Sambucus 🌌 */
-.theme-sambucus .tab:selected { -fx-background-color: #5c1966; }
-.theme-sambucus .tab:selected:tab-index0 { -fx-background-color: #9bff6c; }
-.theme-sambucus .table-view .column-header { -fx-background-color: #021826; -fx-border-color: #5c1966; }
-.theme-sambucus .table-view .column-header .label { -fx-text-fill: #9bff6c; }
-/* 9. Мятный неон 🧪 */
-.theme-mint .tab:selected { -fx-background-color: #01595a; }
-.theme-mint .tab:selected:tab-index0 { -fx-background-color: #06f284; }
-.theme-mint .table-view .column-header { -fx-background-color: #222222; -fx-border-color: #06f284; }
-.theme-mint .table-view .column-header .label { -fx-text-fill: #06f284; }
-/* 10. Чешуя змеи 🐍 */
-.theme-viper { -fx-background-color: #1a2527; }
-.theme-viper .table-view { -fx-background-color: #1a2527; }
-.theme-viper .menu-bar .menu .label { -fx-text-fill: #6e9fa0; }
-.theme-viper .tab:selected { -fx-background-color: #492153; }
-.theme-viper .tab:selected:tab-index0 { -fx-background-color: #355654; }
-.theme-viper .table-view .column-header { -fx-background-color: #355654; -fx-border-color: #6e9fa0; }
-.theme-viper .table-view .column-header .label { -fx-text-fill: #ffffff; }
-/* 11. Свежая суккулента 🪴 */
-.theme-succulent { -fx-background-color: #333a57; }
-.theme-succulent .table-view { -fx-background-color: #333a57; }
-.theme-succulent .menu-bar .menu .label { -fx-text-fill: #88bac8; }
-.theme-succulent .tab:selected { -fx-background-color: #4d869b; }
-.theme-succulent .tab:selected:tab-index0 { -fx-background-color: #336063; }
-.theme-succulent .table-view .column-header { -fx-background-color: #336063; -fx-border-color: #4d869b; }
-.theme-succulent .table-view .column-header .label { -fx-text-fill: #ffffff; }
-/* 12. Голографический жук 🪲 */
-.theme-beetle .tab:selected { -fx-background-color: #9f83ae; }
-.theme-beetle .tab:selected:tab-index0 { -fx-background-color: #8fcce0; }
-.theme-beetle .table-view .column-header { -fx-background-color: #885972; -fx-border-color: #7c6698; }
-.theme-beetle .table-view .column-header .label { -fx-text-fill: #ffffff; }
-/* --- 🎃 SPOOKY HALLOWEEN БЛОК --- */
-/* 13. Самайн 🎃 */
-.theme-samhain .tab:selected { -fx-background-color: #7b4a8f; }
-.theme-samhain .tab:selected:tab-index0 { -fx-background-color: #b24a1d; }
-.theme-samhain .table-view .column-header { -fx-background-color: #2e1e32; -fx-border-color: #7b4a8f; }
-.theme-samhain .table-view .column-header .label { -fx-text-fill: #b28bc3; }
-/* 14. Полночный Хэллоуин 🦇 */
-.theme-halloween { -fx-background-color: #161228; }
-.theme-halloween .table-view { -fx-background-color: #161228; }
-.theme-halloween .menu-bar .menu .label { -fx-text-fill: #bea7b9; }
-.theme-halloween .tab:selected { -fx-background-color: #975f8f; }
-.theme-halloween .tab:selected:tab-index0 { -fx-background-color: #48294e; }
-.theme-halloween .table-view .column-header { -fx-background-color: #1f1b3d; -fx-border-color: #48294e; }
-.theme-halloween .table-view .column-header .label { -fx-text-fill: #bea7b9; }
-/* 15. Тыквенный сироп 🕸️ */
-.theme-syrup { -fx-background-color: #222023; }
-.theme-syrup .table-view { -fx-background-color: #222023; }
-.theme-syrup .menu-bar .menu .label { -fx-text-fill: #d0b88d; }
-.theme-syrup .tab:selected { -fx-background-color: #746b2a; }
-.theme-syrup .tab:selected:tab-index0 { -fx-background-color: #dc5d10; }
-.theme-syrup .table-view .column-header { -fx-background-color: #46374b; -fx-border-color: #746b2a; }
-.theme-syrup .table-view .column-header .label { -fx-text-fill: #ffffff; }
-/* 16. Жуткая ночь 🧙‍♀️ */
 .theme-spooky { -fx-background-color: #1a1a1a; }
 .theme-spooky .table-view { -fx-background-color: #1a1a1a; }
 .theme-spooky .menu-bar .menu .label { -fx-text-fill: #e8641c; }
@@ -363,18 +240,3 @@
 .theme-spooky .tab:selected:tab-index0 { -fx-background-color: #e8641c; }
 .theme-spooky .table-view .column-header { -fx-background-color: #333333; -fx-border-color: #5b2c82; }
 .theme-spooky .table-view .column-header .label { -fx-text-fill: #7fd13b; }
-/* 17. Чёрный шиммер ✨ */
-.theme-shimmer .tab:selected { -fx-background-color: #bc3c65; }
-.theme-shimmer .tab:selected:tab-index0 { -fx-background-color: #2f3761; }
-.theme-shimmer .table-view .column-header { -fx-background-color: #121212; -fx-border-color: #bc3c65; }
-.theme-shimmer .table-view .column-header .label { -fx-text-fill: #bc3c65; }
-/* 18. Призрачный туман 🌫️ */
-.theme-mist .tab:selected { -fx-background-color: #877ebf; }
-.theme-mist .tab:selected:tab-index0 { -fx-background-color: #f28963; }
-.theme-mist .table-view .column-header { -fx-background-color: #96a0d9; -fx-border-color: #877ebf; }
-.theme-mist .table-view .column-header .label { -fx-text-fill: #ffffff; }
-/* 19. Королевский пурпур 👑 */
-.theme-purple .tab:selected { -fx-background-color: #42303d; }
-.theme-purple .tab:selected:tab-index0 { -fx-background-color: #7e6377; }
-.theme-purple .table-view .column-header { -fx-background-color: #363b2e; -fx-border-color: #7e6377; }
-.theme-purple .table-view .column-header .label { -fx-text-fill: #7e6377; }
