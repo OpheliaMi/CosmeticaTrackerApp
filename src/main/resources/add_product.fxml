@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane vgap="15" hgap="10" prefWidth="500.0" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="AddProductController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Название:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField fx:id="nameField" promptText="Например, Помада Черничная 💄" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS"/>
+
+    <Label text="Категория:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <ComboBox fx:id="categoryBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Годен до:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <DatePicker fx:id="datePicker" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Label text="Фото товара:" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.valignment="TOP"/>
+    <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <!-- Квадратный контейнер для предпросмотра изображения -->
+        <ImageView fx:id="imageView" fitWidth="120.0" fitHeight="120.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);"/>
+        <Button text="Загрузить фото 📸" onAction="#handleChooseFile"/>
+    </VBox>
+
+    <Label text="Комментарий:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <TextArea fx:id="commentArea" promptText="Пара слов о продукте..." prefHeight="60.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <Button text="Отмена" onAction="#handleCancel" prefWidth="90.0"/>
+        <Button text="Сохранить ✨" onAction="#handleSave" prefWidth="120.0" style="-fx-font-weight: bold;"/>
+    </HBox>
+</GridPane>

@@ -111,7 +111,7 @@
 .context-menu .menu-item .label,
 .context-menu .menu-item:focused .label {
     -fx-text-fill: #333333 !important;
-    -fx-font-size: inherit;
+    -fx-font-size: 1em; /* Задали относительный размер вместо inherit */
 }
 
 /* Эффект, когда мы наводим мышку на пункт меню («Клубничный йогурт» и др.) */

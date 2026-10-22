@@ -2,10 +2,22 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 
 public class MainController {
@@ -48,37 +60,72 @@ public class MainController {
     // --- МЕХАНИЗМ СВЯЗИ КОЛОНОК С МОДЕЛЬЮ COSMETIC ---
     private void setupColumns(TableView<Cosmetic> table) {
         if (table == null) return;
-        // 0 - фото, 1 - название, 2 - годен до, 3 - комент, 4 - действия
-        TableColumn<Cosmetic, ?> nameCol = table.getColumns().get(1);
-        TableColumn<Cosmetic, ?> dateCol = table.getColumns().get(2);
-        TableColumn<Cosmetic, ?> commentCol = table.getColumns().get(3);
+
+        // Индекс 0 — колонка "фото" из вашего FXML файла
+        TableColumn<Cosmetic, Image> photoCol = (TableColumn<Cosmetic, Image>) table.getColumns().get(0);
+        TableColumn<Cosmetic, String> nameCol = (TableColumn<Cosmetic, String>) table.getColumns().get(1);
+        TableColumn<Cosmetic, String> dateCol = (TableColumn<Cosmetic, String>) table.getColumns().get(2);
+        TableColumn<Cosmetic, String> commentCol = (TableColumn<Cosmetic, String>) table.getColumns().get(3);
 
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
         commentCol.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        // Фабрика свойства для извлечения Image из объекта Cosmetic
+        photoCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getPreviewImage()));
+
+        // Кастомное отображение ячейки в виде миниатюры ImageView
+        photoCol.setCellFactory(column -> new TableCell<>() {
+            private final ImageView iv = new ImageView();
+            @Override
+            protected void updateItem(Image image, boolean empty) {
+                super.updateItem(image, empty);
+                if (empty || image == null) {
+                    setGraphic(null);
+                } else {
+                    iv.setImage(image);
+                    iv.setFitWidth(50);  // Ограничиваем превью по ширине
+                    iv.setFitHeight(50); // и высоте ячейки
+                    iv.setPreserveRatio(true);
+                    setGraphic(iv);
+                }
+            }
+        });
     }
 
     // --- ЗАГРУЗКА ИЗ БАЗЫ ДАННЫХ SQLite И РАСПРЕДЕЛЕНИЕ ПО ВКЛАДКАМ ---
     private void loadDataFromDatabase() {
         masterData.clear();
-        String selectSQL = "SELECT * FROM cosmetics";
+        // Соединяем основную таблицу и таблицу с медиа по cosmetic_id
+        String selectSQL = """
+        SELECT c.*, m.preview_blob 
+        FROM cosmetics c 
+        LEFT JOIN cosmetics_media m ON c.id = m.cosmetic_id
+        """;
 
         try (Connection conn = DatabaseManager.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(selectSQL)) {
 
             while (rs.next()) {
+                Image img = null;
+                byte[] bytes = rs.getBytes("preview_blob");
+
+                // Если в базе есть сохраненные байты картинки, превращаем их в Image
+                if (bytes != null && bytes.length > 0) {
+                    img = new Image(new ByteArrayInputStream(bytes));
+                }
+
                 masterData.add(new Cosmetic(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("category"),
                         rs.getString("expiration_date"),
-                        rs.getString("comment")
+                        rs.getString("comment"),
+                        img // Передаем картинку в конструктор
                 ));
             }
-            System.out.println("🐾 Считано из SQLite базы. Всего позиций: " + masterData.size());
-
-            // Обновляем отображение во всех таблицах на вкладках
+            System.out.println("🐾 Считано из SQLite базы с фото. Всего позиций: " + masterData.size());
             updateTableViews();
 
         } catch (SQLException e) {
@@ -97,28 +144,51 @@ public class MainController {
         tableOther.setItems(masterData.filtered(c -> "Иное".equalsIgnoreCase(c.getCategory())));
     }
 
-    // --- ТЕСТОВОЕ ДОБАВЛЕНИЕ СЛУЧАЙНОГО ПРОДУКТА В SQLite ---
     @FXML
     private void handleAddProduct() {
-        String[] names = {"Палетка Готика 🔮", "Помада Черничная 💄", "Румяна Неоновые ✨", "Контуринг Скульптор 🪐"};
-        String[] categories = {"Тени", "Помады", "Румяна", "Контуринг"};
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/add_product.fxml"));
+            GridPane page = loader.load();
 
-        int randIndex = (int) (Math.random() * names.length);
-        String name = names[randIndex];
-        String category = categories[randIndex];
-        String date = "2028-10-31";
-        String comment = "Связанные таблицы работают! Мур ✨";
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Добавить косметику в коллекцию 🌸");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(tableAll.getScene().getWindow());
 
+            Scene scene = new Scene(page);
+            if (tableAll.getScene().getStylesheets().size() > 0) {
+                scene.getStylesheets().addAll(tableAll.getScene().getStylesheets());
+            }
+            dialogStage.setScene(scene);
+
+            AddProductController controller = loader.getController();
+            dialogStage.showAndWait();
+
+            if (controller.isSaveClicked()) {
+                String name = controller.getName();
+                String category = controller.getCategory();
+                String date = controller.getExpirationDate();
+                String comment = controller.getComment();
+                File imageFile = controller.getSelectedImageFile(); // Получаем файл
+
+                saveProductToDatabase(name, category, date, comment, imageFile);
+            }
+
+        } catch (IOException e) {
+            System.err.println("😿 Не удалось открыть окно добавления косметики!");
+            e.printStackTrace();
+        }
+    }
+
+    private void saveProductToDatabase(String name, String category, String date, String comment, File imageFile) {
         String insertCosmeticSQL = "INSERT INTO cosmetics(name, category, expiration_date, comment) VALUES(?,?,?,?)";
         String insertMediaSQL = "INSERT INTO cosmetics_media(cosmetic_id, preview_blob, high_res_path) VALUES(?,?,?)";
 
         Connection conn = null;
         try {
             conn = DatabaseManager.getConnection();
-            // Включаем транзакцию, чтобы обе таблицы обновлялись одновременно и без сбоев
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Старт транзакции
 
-            // 1. Сохраняем текстовую часть и просим базу вернуть сгенерированный ID
             try (PreparedStatement pstmt1 = conn.prepareStatement(insertCosmeticSQL, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt1.setString(1, name);
                 pstmt1.setString(2, category);
@@ -126,38 +196,38 @@ public class MainController {
                 pstmt1.setString(4, comment);
                 pstmt1.executeUpdate();
 
-                // Получаем ID новой помады/теней
                 try (ResultSet generatedKeys = pstmt1.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int newCosmeticId = generatedKeys.getInt(1);
 
-                        // 2. Создаем связанную строку во второй таблице cosmetics_media под этим же ID
                         try (PreparedStatement pstmt2 = conn.prepareStatement(insertMediaSQL)) {
                             pstmt2.setInt(1, newCosmeticId);
-                            pstmt2.setNull(2, java.sql.Types.BLOB); // Пока картинки нет, пишем NULL
 
-                            // Если это тени, готовим путь для хай-рес картинки на диске
+                            // Если пользователь выбрал фото, конвертируем его в бинарный поток для BLOB
+                            if (imageFile != null && imageFile.exists()) {
+                                FileInputStream fis = new FileInputStream(imageFile);
+                                pstmt2.setBinaryStream(2, fis, (int) imageFile.length());
+                            } else {
+                                pstmt2.setNull(2, java.sql.Types.BLOB);
+                            }
+
                             if ("Тени".equalsIgnoreCase(category)) {
                                 pstmt2.setString(3, "assets/high_res/shadow_" + newCosmeticId + ".png");
                             } else {
                                 pstmt2.setNull(3, java.sql.Types.VARCHAR);
                             }
-
                             pstmt2.executeUpdate();
                         }
                     }
                 }
             }
 
-            // Подтверждаем сохранение в обе таблицы
-            conn.commit();
-            System.out.println("✨ Успех! Данные записаны в cosmetics, связь создана в cosmetics_media!");
-
-            // Перезагружаем интерфейс
+            conn.commit(); // Сохраняем все
+            System.out.println("✨ Успешно добавлено с фото: " + name);
             loadDataFromDatabase();
 
-        } catch (SQLException e) {
-            System.err.println("😿 Ошибка сложного сохранения в БД: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("😿 Ошибка при сохранении с фото в БД: " + e.getMessage());
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             }
@@ -167,6 +237,7 @@ public class MainController {
             }
         }
     }
+
 
 
     // --- КНОПКА «ВЫХОД» ---
