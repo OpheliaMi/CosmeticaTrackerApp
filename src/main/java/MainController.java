@@ -4,13 +4,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -18,6 +17,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.*;
 
 public class MainController {
@@ -47,6 +50,8 @@ public class MainController {
 
         // Загружаем данные из файла SQLite
         loadDataFromDatabase();
+
+        setupShadowsClickWindow();
 
         // Устанавливаем дефолтные темы, шрифты и размеры при старте приложения
         Platform.runLater(() -> {
@@ -96,9 +101,9 @@ public class MainController {
     // --- ЗАГРУЗКА ИЗ БАЗЫ ДАННЫХ SQLite И РАСПРЕДЕЛЕНИЕ ПО ВКЛАДКАМ ---
     private void loadDataFromDatabase() {
         masterData.clear();
-        // Соединяем основную таблицу и таблицу с медиа по cosmetic_id
+        // Добавили m.high_res_path в запрос
         String selectSQL = """
-        SELECT c.*, m.preview_blob 
+        SELECT c.*, m.preview_blob, m.high_res_path 
         FROM cosmetics c 
         LEFT JOIN cosmetics_media m ON c.id = m.cosmetic_id
         """;
@@ -111,7 +116,6 @@ public class MainController {
                 Image img = null;
                 byte[] bytes = rs.getBytes("preview_blob");
 
-                // Если в базе есть сохраненные байты картинки, превращаем их в Image
                 if (bytes != null && bytes.length > 0) {
                     img = new Image(new ByteArrayInputStream(bytes));
                 }
@@ -122,16 +126,18 @@ public class MainController {
                         rs.getString("category"),
                         rs.getString("expiration_date"),
                         rs.getString("comment"),
-                        img // Передаем картинку в конструктор
+                        img,
+                        rs.getString("high_res_path") // Передаем путь к оригиналу
                 ));
             }
-            System.out.println("🐾 Считано из SQLite базы с фото. Всего позиций: " + masterData.size());
+            System.out.println("🐾 Считано из SQLite базы. Всего позиций: " + masterData.size());
             updateTableViews();
 
         } catch (SQLException e) {
             System.err.println("😿 Не удалось загрузить данные из базы SQLite: " + e.getMessage());
         }
     }
+
 
     private void updateTableViews() {
         tableAll.setItems(masterData);
@@ -187,7 +193,7 @@ public class MainController {
         Connection conn = null;
         try {
             conn = DatabaseManager.getConnection();
-            conn.setAutoCommit(false); // Старт транзакции
+            conn.setAutoCommit(false); // Стартуем транзакцию
 
             try (PreparedStatement pstmt1 = conn.prepareStatement(insertCosmeticSQL, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt1.setString(1, name);
@@ -199,35 +205,79 @@ public class MainController {
                 try (ResultSet generatedKeys = pstmt1.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int newCosmeticId = generatedKeys.getInt(1);
+                        String calculatedHighResPath = null;
 
+                        // --- ЛОГИКА ДЛЯ ТЕНЕЙ: КОПИРОВАНИЕ НА ДИСК ---
+                        if ("Тени".equalsIgnoreCase(category)) {
+                            if (imageFile != null && imageFile.exists()) {
+                                try {
+                                    // 1. Создаем целевую директорию assets/high_res в корне проекта, если её нет
+                                    Path dirPath = Paths.get("assets", "high_res");
+                                    if (!Files.exists(dirPath)) {
+                                        Files.createDirectories(dirPath);
+                                    }
+
+                                    // 2. Вычисляем расширение исходного файла (.png, .jpg и т.д.)
+                                    String extension = "";
+                                    String fileName = imageFile.getName();
+                                    int i = fileName.lastIndexOf('.');
+                                    if (i > 0) {
+                                        extension = fileName.substring(i);
+                                    } else {
+                                        extension = ".png"; // Дефолтное расширение, если его нет
+                                    }
+
+                                    // 3. Формируем красивый результирующий путь: assets/high_res/shadow_ID.ext
+                                    Path targetPath = dirPath.resolve("shadow_" + newCosmeticId + extension);
+
+                                    // 4. Копируем файл на диск (с заменой, если вдруг файл уже существовал)
+                                    Files.copy(imageFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+                                    // Сохраняем строку пути для записи в базу данных SQLite (используем прямой слэш для совместимости)
+                                    calculatedHighResPath = "assets/high_res/shadow_" + newCosmeticId + extension;
+                                    System.out.println("📸 Фото теней успешно скопировано на диск: " + targetPath.toAbsolutePath());
+
+                                } catch (Exception e) {
+                                    System.err.println("😿 Не удалось скопировать файл картинки на диск: " + e.getMessage());
+                                    // Не прерываем транзакцию, товар всё равно запишется, но выведем ошибку в консоль
+                                }
+                            }
+                        }
+
+                        // 2. Создаем запись во второй таблице (cosmetics_media)
                         try (PreparedStatement pstmt2 = conn.prepareStatement(insertMediaSQL)) {
                             pstmt2.setInt(1, newCosmeticId);
 
-                            // Если пользователь выбрал фото, конвертируем его в бинарный поток для BLOB
+                            // Запись BLOB для миниатюры в таблице (работает для всех категорий)
                             if (imageFile != null && imageFile.exists()) {
-                                FileInputStream fis = new FileInputStream(imageFile);
-                                pstmt2.setBinaryStream(2, fis, (int) imageFile.length());
+                                try (FileInputStream fis = new FileInputStream(imageFile)) {
+                                    pstmt2.setBinaryStream(2, fis, (int) imageFile.length());
+                                }
                             } else {
                                 pstmt2.setNull(2, java.sql.Types.BLOB);
                             }
 
-                            if ("Тени".equalsIgnoreCase(category)) {
-                                pstmt2.setString(3, "assets/high_res/shadow_" + newCosmeticId + ".png");
+                            // Запись пути к оригиналу высокой четкости (только для теней, для остальных — NULL)
+                            if (calculatedHighResPath != null) {
+                                pstmt2.setString(3, calculatedHighResPath);
                             } else {
                                 pstmt2.setNull(3, java.sql.Types.VARCHAR);
                             }
+
                             pstmt2.executeUpdate();
                         }
                     }
                 }
             }
 
-            conn.commit(); // Сохраняем все
-            System.out.println("✨ Успешно добавлено с фото: " + name);
+            conn.commit(); // Подтверждаем транзакцию в БД
+            System.out.println("✨ Успех! Товар добавлен, связь в БД и файл на диске синхронизированы.");
+
+            // Обновляем таблицы в интерфейсе
             loadDataFromDatabase();
 
         } catch (Exception e) {
-            System.err.println("😿 Ошибка при сохранении с фото в БД: " + e.getMessage());
+            System.err.println("😿 Ошибка транзакции при сохранении: " + e.getMessage());
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             }
@@ -236,6 +286,77 @@ public class MainController {
                 try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) { e.printStackTrace(); }
             }
         }
+    }
+
+
+    private void setupShadowsClickWindow() {
+        if (tableShadows == null) return;
+
+        tableShadows.setRowFactory(tv -> {
+            TableRow<Cosmetic> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                // Проверяем: двойной клик И строка не пустая
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Cosmetic clickedCosmetic = row.getItem();
+
+                    // Вызываем метод открытия большого фото
+                    openHighResImageWindow(clickedCosmetic);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void openHighResImageWindow(Cosmetic cosmetic) {
+        String path = cosmetic.getHighResPath();
+
+        // Проверяем, задан ли путь в БД
+        if (path == null || path.trim().isEmpty()) {
+            showNoImageAlert("У этого товара нет ссылки на оригинальное фото.");
+            return;
+        }
+
+        File file = new File(path);
+        // Проверяем, существует ли физически файл на диске
+        if (!file.exists()) {
+            showNoImageAlert("Файл не найден по пути: " + file.getAbsolutePath() +
+                    "\nУбедитесь, что папка assets/high_res создана и файл существует.");
+            return;
+        }
+
+        // Создаем динамическое модальное окно для отображения большого фото
+        try {
+            Image highResImage = new Image(file.toURI().toString());
+            ImageView imageView = new ImageView(highResImage);
+
+            // Ограничиваем максимальный размер окна под экран, сохраняя пропорции
+            imageView.setFitWidth(600);
+            imageView.setFitHeight(600);
+            imageView.setPreserveRatio(true);
+
+            StackPane root = new StackPane(imageView);
+            root.setStyle("-fx-background-color: #121212; -fx-padding: 10;"); // Красивая темная подложка
+
+            Stage imageStage = new Stage();
+            imageStage.setTitle("Просмотр оригинала: " + cosmetic.getName() + " 🔮");
+            imageStage.initModality(Modality.APPLICATION_MODAL);
+            imageStage.initOwner(tableShadows.getScene().getWindow());
+
+            Scene scene = new Scene(root);
+            imageStage.setScene(scene);
+            imageStage.show();
+
+        } catch (Exception e) {
+            System.err.println("Ошибка при загрузке тяжелого изображения: " + e.getMessage());
+        }
+    }
+
+    private void showNoImageAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Информация");
+        alert.setHeaderText("Не удалось открыть оригинал теней");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 

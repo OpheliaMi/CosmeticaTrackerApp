@@ -9,16 +9,19 @@ public class Cosmetic {
     private final SimpleStringProperty expirationDate;
     private final SimpleStringProperty comment;
     private Image previewImage;
+    private String highResPath;
 
-    public Cosmetic(int id, String name, String category, String expirationDate, String comment, Image previewImage) {
+    public Cosmetic(int id, String name, String category, String expirationDate, String comment, Image previewImage, String highResPath) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.category = new SimpleStringProperty(category);
         this.expirationDate = new SimpleStringProperty(expirationDate);
         this.comment = new SimpleStringProperty(comment);
-        this.previewImage = previewImage; // Инициализируем
+        this.previewImage = previewImage;
+        this.highResPath = highResPath; // Инициализируем
     }
 
+    public String getHighResPath() { return highResPath; }
     public Image getPreviewImage() { return previewImage; }
     public void setPreviewImage(Image previewImage) { this.previewImage = previewImage; }
     // Геттеры для JavaFX TableView
