@@ -1,22 +1,29 @@
 /* ==========================================================================
-   1. ОБЩИЕ СТИЛИ И БАЗОВЫЕ НАСТРОЙКИ СТРУКТУРЫ
-   ========================================================================== */
+1. ОБЩИЕ СТИЛИ И БАЗОВЫЕ НАСТРОЙКИ СТРУКТУРЫ
+========================================================================== */
 .root {
     -fx-background-color: #ffffff;
 }
 
+/* Устранение синей рамки фокуса для всех ключевых элементов */
+.tab:focused, .tab-pane:focused, .table-view:focused, .root:focused,
+.text-field:focused, .text-area:focused, .combo-box:focused, .date-picker:focused {
+    -fx-focus-color: transparent !important;
+    -fx-faint-focus-color: transparent !important;
+}
+
 /* ==========================================================================
-   2. МОДИФИКАТОРЫ СИСТЕМНЫХ МОНОШИРИННЫХ ШРИФТОВ И ГЛАВНАЯ ПАНЕЛЬ
-   ========================================================================== */
+2. МОДИФИКАТОРЫ СИСТЕМНЫХ ШРИФТОВ И ВЕРХНЯЯ ПАНЕЛЬ
+========================================================================== */
 
 /* Базовые стили для шрифтов */
-.font-custom, .font-custom .menu-bar .menu .label, .font-custom .tab .tab-label, .font-custom .table-view .column-header .label, .font-custom .table-view .table-cell { -fx-font-family: "Consolas", "Monaco", monospace; }
-.font-modern, .font-modern .menu-bar .menu .label, .font-modern .tab .tab-label, .font-modern .table-view .column-header .label, .font-modern .table-view .table-cell { -fx-font-family: "Courier New", "Courier", monospace; -fx-font-weight: bold; }
-.font-system, .font-system .menu-bar .menu .label, .font-system .tab .tab-label, .font-system .table-view .column-header .label, .font-system .table-view .table-cell { -fx-font-family: "Lucida Console", "Monaco", monospace; }
+.font-custom, .font-custom .menu-bar .menu .label, .font-custom .tab .tab-label, .font-custom .table-view .column-header .label, .font-custom .table-view .table-cell, .font-custom .context-menu .menu-item .label { -fx-font-family: "Consolas", "Monaco", monospace; }
+.font-modern, .font-modern .menu-bar .menu .label, .font-modern .tab .tab-label, .font-modern .table-view .column-header .label, .font-modern .table-view .table-cell, .font-modern .context-menu .menu-item .label { -fx-font-family: "Courier New", "Courier", monospace; -fx-font-weight: bold; }
+.font-system, .font-system .menu-bar .menu .label, .font-system .tab .tab-label, .font-system .table-view .column-header .label, .font-system .table-view .table-cell, .font-system .context-menu .menu-item .label { -fx-font-family: "Lucida Console", "Monaco", monospace; }
 
 /* Настройка верхней панели меню (MenuBar) */
 .menu-bar {
-    -fx-background-color: #ffffff !important; /* Всегда белый фон панели */
+    -fx-background-color: #ffffff;
     -fx-border-color: #f2ebeb !important;
     -fx-border-width: 0 0 1 0 !important;
     -fx-padding: 8 15 8 15 !important;
@@ -28,152 +35,286 @@
     -fx-padding: 6 12 6 12 !important;
 }
 
-/* 🛑 ФИКС: Текст главных кнопок панели в обычном состоянии (Всегда тёмно-серый) */
+/* Текст главных кнопок панели в обычном состоянии */
 .menu-bar .menu .label {
-    -fx-text-fill: #3a3a3a !important;
+    -fx-text-fill: #333333;
     -fx-font-weight: bold !important;
 }
 
-/* 🛑 ФИКС: Поведение текста главных кнопок («Меню», «Темы»...) ПРИ НАВЕДЕНИИ МЫШИ! */
+/* Поведение кнопок меню ПРИ НАВЕДЕНИИ И ОТКРЫТИИ (Светлая тема по умолчанию) */
 .menu-bar .menu:hover,
 .menu-bar .menu:focused,
 .menu-bar .menu:showing {
-    -fx-background-color: #fff0f2 !important; /* Мягкая розовая подложка */
+    -fx-background-color: #fff0f2 !important;
 }
 
-/* Принудительно делаем текст бордовым при наведении во всех 19 темах, чтобы он не исчезал! */
 .menu-bar .menu:hover .label,
 .menu-bar .menu:focused .label,
 .menu-bar .menu:showing .label {
-    -fx-text-fill: #a04d5a !important; /* Красивый контрастный цвет */
-    -fx-font-weight: bold !important;
+    -fx-text-fill: #a04d5a !important;
+}
+
+/* --- УМНЫЙ ПЕРЕКРАС КНОПОК МЕНЮ ДЛЯ ВСЕХ ТЁМНЫХ ТЕМ --- */
+.theme-cyber .menu-bar .menu:hover, .theme-cyber .menu-bar .menu:focused, .theme-cyber .menu-bar .menu:showing,
+.theme-sambucus .menu-bar .menu:hover, .theme-sambucus .menu-bar .menu:focused, .theme-sambucus .menu-bar .menu:showing,
+.theme-mint .menu-bar .menu:hover, .theme-mint .menu-bar .menu:focused, .theme-mint .menu-bar .menu:showing,
+.theme-viper .menu-bar .menu:hover, .theme-viper .menu-bar .menu:focused, .theme-viper .menu-bar .menu:showing,
+.theme-succulent .menu-bar .menu:hover, .theme-succulent .menu-bar .menu:focused, .theme-succulent .menu-bar .menu:showing,
+.theme-beetle .menu-bar .menu:hover, .theme-beetle .menu-bar .menu:focused, .theme-beetle .menu-bar .menu:showing,
+.theme-samhain .menu-bar .menu:hover, .theme-samhain .menu-bar .menu:focused, .theme-samhain .menu-bar .menu:showing,
+.theme-halloween .menu-bar .menu:hover, .theme-halloween .menu-bar .menu:focused, .theme-halloween .menu-bar .menu:showing,
+.theme-syrup .menu-bar .menu:hover, .theme-syrup .menu-bar .menu:focused, .theme-syrup .menu-bar .menu:showing,
+.theme-spooky .menu-bar .menu:hover, .theme-spooky .menu-bar .menu:focused, .theme-spooky .menu-bar .menu:showing,
+.theme-shimmer .menu-bar .menu:hover, .theme-shimmer .menu-bar .menu:focused, .theme-shimmer .menu-bar .menu:showing,
+.theme-mist .menu-bar .menu:hover, .theme-mist .menu-bar .menu:focused, .theme-mist .menu-bar .menu:showing,
+.theme-purple .menu-bar .menu:hover, .theme-purple .menu-bar .menu:focused, .theme-purple .menu-bar .menu:showing {
+    -fx-background-color: #24242e !important; /* Тёмный аккуратный фон при клике/наведении */
+}
+
+.theme-cyber .menu-bar .menu:hover .label, .theme-cyber .menu-bar .menu:focused .label, .theme-cyber .menu-bar .menu:showing .label,
+.theme-spooky .menu-bar .menu:hover .label, .theme-spooky .menu-bar .menu:focused .label, .theme-spooky .menu-bar .menu:showing .label,
+.theme-halloween .menu-bar .menu:hover .label, .theme-halloween .menu-bar .menu:focused .label, .theme-halloween .menu-bar .menu:showing .label {
+    -fx-text-fill: #ff007f !important; /* Яркий неоновый акцент для текста активной кнопки */
+}
+
+/* Цвет текста кнопок меню при наведении для остальных тёмных тем */
+.theme-sambucus .menu-bar .menu:hover .label, .theme-sambucus .menu-bar .menu:showing .label,
+.theme-mint .menu-bar .menu:hover .label, .theme-mint .menu-bar .menu:showing .label,
+.theme-purple .menu-bar .menu:hover .label, .theme-purple .menu-bar .menu:showing .label,
+.theme-viper .menu-bar .menu:hover .label, .theme-viper .menu-bar .menu:showing .label,
+.theme-shimmer .menu-bar .menu:hover .label, .theme-shimmer .menu-bar .menu:showing .label,
+.theme-mist .menu-bar .menu:hover .label, .theme-mist .menu-bar .menu:showing .label {
+    -fx-text-fill: #fffffe !important;
 }
 
 
 /* ==========================================================================
-   3. МОДИФИКАТОРЫ РАЗМЕРОВ ТЕКСТА (ЖЁСТКИЙ КОНТРОЛЬ МАСШТАБА ТАБЛИЦ) 🔎
-   ========================================================================== */
+3. МОДИФИКАТОРЫ РАЗМЕРОВ ТЕКСТА (ЖЁСТКИЙ КОНТРОЛЬ МАСШТАБА) 🔎
+========================================================================== */
 
 /* --- Мелкий размер --- */
 .size-small { -fx-font-size: 13px; }
 .size-small .menu-bar .menu .label { -fx-font-size: 14px; }
 .size-small .tab .tab-label { -fx-font-size: 13px; }
 .size-small .table-view .column-header .label,
-.size-small .table-view .table-cell { -fx-font-size: 13px !important; }
+.size-small .table-view .table-cell,
+.size-small .context-menu .menu-item .label { -fx-font-size: 13px !important; }
 
-/* --- Средний размер (Стандартный по умолчанию - теперь крупный и четкий!) --- */
+/* --- Средний размер --- */
 .size-medium { -fx-font-size: 16px; }
 .size-medium .menu-bar .menu .label { -fx-font-size: 17px; }
 .size-medium .tab .tab-label { -fx-font-size: 16px; }
 .size-medium .table-view .column-header .label,
-.size-medium .table-view .table-cell { -fx-font-size: 16px !important; }
+.size-medium .table-view .table-cell,
+.size-medium .context-menu .menu-item .label { -fx-font-size: 16px !important; }
 
 /* --- Крупный размер --- */
 .size-large { -fx-font-size: 19px; }
 .size-large .menu-bar .menu .label { -fx-font-size: 21px; }
 .size-large .tab .tab-label { -fx-font-size: 19px; }
 .size-large .table-view .column-header .label,
-.size-large .table-view .table-cell { -fx-font-size: 19px !important; }
+.size-large .table-view .table-cell,
+.size-large .context-menu .menu-item .label { -fx-font-size: 19px !important; }
 
 /* ==========================================================================
-   4. ИНТЕРФЕЙСНЫЕ МЕНЮ И ВЫПАДАЮЩИЕ СПИСКИ (ФИКС ИСЧЕЗАЮЩЕГО ТЕКСТА!) 🌸
-   ========================================================================== */
-.menu-bar {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #f2ebeb;
-    -fx-border-width: 0 0 1 0;
-    -fx-padding: 8 15 8 15;
-}
+4. СТИЛИЗАЦИЯ ВЫПАДАЮЩИХ МЕНЮ С УЧЕТОМ АКТИВНОЙ ТЕМЫ 🌸
+========================================================================== */
 
-.menu-bar .menu {
-    -fx-background-color: transparent;
-    -fx-background-radius: 6;
-    -fx-padding: 6 12 6 12;
-}
-
-/* Выпадающие контекстные окошки (для всех 19 тем они ВСЕГДА светлые и аккуратные) */
 .context-menu {
     -fx-background-color: #ffffff !important;
     -fx-border-color: #e2d9d9 !important;
-    -fx-border-radius: 8 !important;
-    -fx-background-radius: 8 !important;
+    -fx-border-radius: 8px !important;
+    -fx-background-radius: 8px !important;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4) !important;
-    -fx-padding: 4 0 4 0 !important;
+    -fx-padding: 5px !important;
 }
 
-/* Строчки внутри выпадающего списка в обычном состоянии */
-.menu-item {
-    -fx-padding: 6 20 6 15 !important;
+/* Жесткое исправление "дурацких белых уголков" во всех вложенных подменю */
+.context-menu *.context-menu {
+    -fx-background-radius: 8px !important;
+    -fx-border-radius: 8px !important;
+}
+
+.context-menu .menu-item {
     -fx-background-color: transparent !important;
+    -fx-padding: 6 15 6 15 !important;
 }
 
-/* Текст пунктов меню — ПРИНУДИТЕЛЬНО делаем тёмным во всех темах, чтобы он не исчезал! 🛑 */
-.context-menu .menu-item .label,
-.context-menu .menu-item:focused .label {
+/* Базовый цвет текста для светлых тем */
+.context-menu .menu-item .label {
     -fx-text-fill: #333333 !important;
-    -fx-font-size: 1em; /* Задали относительный размер вместо inherit */
 }
 
-/* Эффект, когда мы наводим мышку на пункт меню («Клубничный йогурт» и др.) */
 .context-menu .menu-item:hover,
-.context-menu .menu-item:focused {
-    -fx-background-color: #f5eded !important; /* Приятная розовая подсветка */
+.context-menu .menu-item:focused,
+.context-menu .menu-item:showing {
+    -fx-background-color: #f5eded !important;
 }
 
-/* Цвет текста активного пункта при наведении — ПРИНУДИТЕЛЬНО тёмно-бордовый */
 .context-menu .menu-item:hover .label,
-.context-menu .menu-item:focused .label {
+.context-menu .menu-item:focused .label,
+.context-menu .menu-item:showing .label {
     -fx-text-fill: #a04d5a !important;
-    -fx-font-weight: bold !important;
 }
 
-/* Настройка стрелочек-индикаторов подменю */
-.context-menu .menu-item .left-container,
-.context-menu .menu-item .right-container {
-    -fx-background-color: transparent !important;
+/* --- ТОТАЛЬНЫЙ ИСПРАВЛЕННЫЙ ПЕРЕКРАС ДЛЯ ТЁМНЫХ РЕЖИМОВ --- */
+.theme-cyber .context-menu, .theme-cyber.context-menu,
+.theme-sambucus .context-menu, .theme-sambucus.context-menu,
+.theme-mint .context-menu, .theme-mint.context-menu,
+.theme-viper .context-menu, .theme-viper.context-menu,
+.theme-succulent .context-menu, .theme-succulent.context-menu,
+.theme-beetle .context-menu, .theme-beetle.context-menu,
+.theme-samhain .context-menu, .theme-samhain.context-menu,
+.theme-halloween .context-menu, .theme-halloween.context-menu,
+.theme-syrup .context-menu, .theme-syrup.context-menu,
+.theme-spooky .context-menu, .theme-spooky.context-menu,
+.theme-shimmer .context-menu, .theme-shimmer.context-menu,
+.theme-mist .context-menu, .theme-mist.context-menu,
+.theme-purple .context-menu, .theme-purple.context-menu {
+    -fx-background-color: #24242e !important;
+    -fx-border-color: #16161a !important;
 }
 
-.context-menu .menu-item .right-container .arrow {
-    -fx-background-color: #666666 !important; /* Серый цвет стрелочки */
-    -fx-shape: "M 0 0 L 4 4 L 0 8 Z" !important;
+/* Белый цвет текста для пунктов меню в тёмных режимах */
+.theme-cyber .context-menu .menu-item .label, .theme-cyber.context-menu .menu-item .label,
+.theme-sambucus .context-menu .menu-item .label, .theme-sambucus.context-menu .menu-item .label,
+.theme-mint .context-menu .menu-item .label, .theme-mint.context-menu .menu-item .label,
+.theme-viper .context-menu .menu-item .label, .theme-viper.context-menu .menu-item .label,
+.theme-succulent .context-menu .menu-item .label, .theme-succulent.context-menu .menu-item .label,
+.theme-beetle .context-menu .menu-item .label, .theme-beetle.context-menu .menu-item .label,
+.theme-samhain .context-menu .menu-item .label, .theme-samhain.context-menu .menu-item .label,
+.theme-halloween .context-menu .menu-item .label, .theme-halloween.context-menu .menu-item .label,
+.theme-syrup .context-menu .menu-item .label, .theme-syrup.context-menu .menu-item .label,
+.theme-spooky .context-menu .menu-item .label, .theme-spooky.context-menu .menu-item .label,
+.theme-shimmer .context-menu .menu-item .label, .theme-shimmer.context-menu .menu-item .label,
+.theme-mist .context-menu .menu-item .label, .theme-mist.context-menu .menu-item .label,
+.theme-purple .context-menu .menu-item .label, .theme-purple.context-menu .menu-item .label {
+    -fx-text-fill: #fffffe !important;
 }
 
-/* Меняем цвет стрелочки при наведении */
-.context-menu .menu-item:hover .right-container .arrow {
-    -fx-background-color: #a04d5a !important;
+/* Исправленный аккуратный фон при наведении (ВМЕСТО РОЗОВОГО) для всех тёмных тем */
+.theme-cyber .context-menu .menu-item:hover, .theme-cyber.context-menu .menu-item:hover,
+.theme-cyber .context-menu .menu-item:focused, .theme-cyber.context-menu .menu-item:focused,
+.theme-cyber .context-menu .menu-item:showing, .theme-cyber.context-menu .menu-item:showing,
+.theme-spooky .context-menu .menu-item:hover, .theme-spooky.context-menu .menu-item:hover,
+.theme-spooky .context-menu .menu-item:focused, .theme-spooky.context-menu .menu-item:focused,
+.theme-spooky .context-menu .menu-item:showing, .theme-spooky.context-menu .menu-item:showing,
+.theme-halloween .context-menu .menu-item:hover, .theme-halloween.context-menu .menu-item:hover,
+.theme-halloween .context-menu .menu-item:focused, .theme-halloween.context-menu .menu-item:focused,
+.theme-halloween .context-menu .menu-item:showing, .theme-halloween.context-menu .menu-item:showing,
+.theme-purple .context-menu .menu-item:hover, .theme-purple.context-menu .menu-item:hover,
+.theme-purple .context-menu .menu-item:focused, .theme-purple.context-menu .menu-item:focused,
+.theme-purple .context-menu .menu-item:showing, .theme-purple.context-menu .menu-item:showing,
+.theme-sambucus .context-menu .menu-item:hover, .theme-sambucus.context-menu .menu-item:hover,
+.theme-sambucus .context-menu .menu-item:focused, .theme-sambucus.context-menu .menu-item:focused,
+.theme-sambucus .context-menu .menu-item:showing, .theme-sambucus.context-menu .menu-item:showing,
+.theme-mint .context-menu .menu-item:hover, .theme-mint.context-menu .menu-item:hover,
+.theme-mint .context-menu .menu-item:focused, .theme-mint.context-menu .menu-item:focused,
+.theme-mint .context-menu .menu-item:showing, .theme-mint.context-menu .menu-item:showing,
+.theme-viper .context-menu .menu-item:hover, .theme-viper.context-menu .menu-item:hover,
+.theme-viper .context-menu .menu-item:focused, .theme-viper.context-menu .menu-item:focused,
+.theme-viper .context-menu .menu-item:showing, .theme-viper.context-menu .menu-item:showing,
+.theme-succulent .context-menu .menu-item:hover, .theme-succulent.context-menu .menu-item:hover,
+.theme-succulent .context-menu .menu-item:focused, .theme-succulent.context-menu .menu-item:focused,
+.theme-succulent .context-menu .menu-item:showing, .theme-succulent.context-menu .menu-item:showing,
+.theme-beetle .context-menu .menu-item:hover, .theme-beetle.context-menu .menu-item:hover,
+.theme-beetle .context-menu .menu-item:focused, .theme-beetle.context-menu .menu-item:focused,
+.theme-beetle .context-menu .menu-item:showing, .theme-beetle.context-menu .menu-item:showing,
+.theme-samhain .context-menu .menu-item:hover, .theme-samhain.context-menu .menu-item:hover,
+.theme-samhain .context-menu .menu-item:focused, .theme-samhain.context-menu .menu-item:focused,
+.theme-samhain .context-menu .menu-item:showing, .theme-samhain.context-menu .menu-item:showing,
+.theme-syrup .context-menu .menu-item:hover, .theme-syrup.context-menu .menu-item:hover,
+.theme-syrup .context-menu .menu-item:focused, .theme-syrup.context-menu .menu-item:focused,
+.theme-syrup .context-menu .menu-item:showing, .theme-syrup.context-menu .menu-item:showing,
+.theme-shimmer .context-menu .menu-item:hover, .theme-shimmer.context-menu .menu-item:hover,
+.theme-shimmer .context-menu .menu-item:focused, .theme-shimmer.context-menu .menu-item:focused,
+.theme-shimmer .context-menu .menu-item:showing, .theme-shimmer.context-menu .menu-item:showing,
+.theme-mist .context-menu .menu-item:hover, .theme-mist.context-menu .menu-item:hover,
+.theme-mist .context-menu .menu-item:focused, .theme-mist.context-menu .menu-item:focused,
+.theme-mist .context-menu .menu-item:showing, .theme-mist.context-menu .menu-item:showing {
+    -fx-background-color: #2d2d3d !important; /* Единый красивый тёмный фон при наведении */
 }
 
-/* Идеальные отступы для раскрывающихся сбоку подменю */
-.context-menu .context-menu {
-    -fx-translate-x: 0 !important;
-    -fx-translate-y: 0 !important;
-}
-
-/* Полное выкашивание синей обводки фокуса */
-.tab:focused, .tab-pane:focused, .table-view:focused, .root:focused {
-    -fx-focus-color: transparent !important;
-    -fx-faint-focus-color: transparent !important;
+/* Неоновые акценты текста подменю при наведении/открытии в тёмных темах */
+.theme-cyber .context-menu .menu-item:hover .label, .theme-cyber.context-menu .menu-item:hover .label,
+.theme-cyber .context-menu .menu-item:focused .label, .theme-cyber.context-menu .menu-item:focused .label,
+.theme-cyber .context-menu .menu-item:showing .label, .theme-cyber.context-menu .menu-item:showing .label,
+.theme-spooky .context-menu .menu-item:hover .label, .theme-spooky.context-menu .menu-item:hover .label,
+.theme-spooky .context-menu .menu-item:focused .label, .theme-spooky.context-menu .menu-item:focused .label,
+.theme-spooky .context-menu .menu-item:showing .label, .theme-spooky.context-menu .menu-item:showing .label,
+.theme-halloween .context-menu .menu-item:hover .label, .theme-halloween.context-menu .menu-item:hover .label,
+.theme-halloween .context-menu .menu-item:focused .label, .theme-halloween.context-menu .menu-item:focused .label,
+.theme-halloween .context-menu .menu-item:showing .label, .theme-halloween.context-menu .menu-item:showing .label {
+    -fx-text-fill: #ff007f !important;
 }
 
 
 /* ==========================================================================
-   5. ВИНТАЖНАЯ ПАНЕЛЬ ВКЛАДОК И СТИЛИЗАЦИЯ ТАБЛИЦ
-   ========================================================================== */
-.tab-pane .tab-header-area .tab-header-background { -fx-background-color: #ffffff; -fx-border-color: #f2ebeb; -fx-border-width: 0 0 1 0; }
-.tab-pane .tab-header-area { -fx-padding: 12 15 0 15; }
-.tab { -fx-background-color: #f2eded; -fx-background-radius: 8 8 0 0; -fx-padding: 8 16 8 16; -fx-margin: 0 2 0 0; -fx-border-color: #f2ebeb; -fx-border-width: 1 1 0 1; }
-.table-view { -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 10; }
-.table-view .virtual-flow, .table-view .placeholder { -fx-background-color: transparent; }
-.table-view .column-header { -fx-border-width: 0 0 2 0; -fx-size: 45; }
-.table-row-cell { -fx-border-width: 0 0 1 0; -fx-padding: 8; -fx-min-height: 45px; }
-.table-view .placeholder .label { -fx-font-style: italic; }
+5. СТИЛИЗАЦИЯ ВКЛАДОК И ТАБЛИЦ (БАЗОВАЯ СВЕТЛАЯ)
+========================================================================== */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #f2ebeb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 12 15 0 15;
+}
+
+.tab {
+    -fx-background-color: #f2eded;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 8 16 8 16;
+    -fx-margin: 0 2 0 0;
+    -fx-border-color: #f2ebeb;
+    -fx-border-width: 1 1 0 1;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #5a5a5a;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 10;
+}
+
+.table-view .virtual-flow, .table-view .placeholder {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell {
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 8;
+}
+
+.table-view .placeholder .label {
+    -fx-font-style: italic;
+}
+
+/* Скрытие вертикальных разделителей ячеек */
+.table-view .table-cell {
+    -fx-border-color: transparent !important;
+    -fx-border-width: 0 !important;
+    -fx-text-fill: #333333;
+}
+
+/* Шапка таблицы */
+.table-view .column-header {
+    -fx-border-color: transparent !important;
+    -fx-border-width: 0 0 2 0;
+    -fx-size: 45;
+}
 
 /* ==========================================================================
-   6. РЕАЛИЗАЦИЯ 19 ТЕМ ОФОРМЛЕНИЯ
-   ========================================================================== */
-/* --- ПАСТЕЛЬНЫЙ БЛОК --- */
+6. РЕАЛИЗАЦИЯ ТЕМ ОФОРМЛЕНИЯ И ИСПРАВЛЕНИЕ ОШИБОК СЕЛЕКТОРОВ
+========================================================================== */
+
+/* --- СВЕТЛЫЕ ПАСТЕЛЬНЫЕ ТЕМЫ --- */
 .theme-rainbow .tab:selected { -fx-background-color: #ffccd5; }
-.theme-rainbow .tab:selected:tab-index0 { -fx-background-color: #ffadad; }
+.theme-rainbow .tab:selected .tab-label { -fx-text-fill: #333333; }
 .theme-rainbow .table-view .column-header { -fx-background-color: #ffffff; -fx-border-color: #f7eded; }
 .theme-rainbow .table-view .column-header .label { -fx-text-fill: #6b5b5c; }
 .theme-rainbow .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #faf5f5; }
@@ -181,62 +322,141 @@
 .theme-rainbow .table-row-cell:filled:selected { -fx-background-color: #f5f0f1; }
 
 .theme-pink .tab:selected { -fx-background-color: #ffc2d1; }
-.theme-pink .tab:selected:tab-index0 { -fx-background-color: #ffb3c6; }
+.theme-pink .tab:selected .tab-label { -fx-text-fill: #fb6f92; }
 .theme-pink .table-view .column-header { -fx-background-color: #fff5f7; -fx-border-color: #ffe5ec; }
 .theme-pink .table-view .column-header .label { -fx-text-fill: #fb6f92; }
 .theme-pink .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #fff5f7; }
 .theme-pink .table-row-cell:hover { -fx-background-color: #fff0f3; }
 .theme-pink .table-row-cell:filled:selected { -fx-background-color: #ffe5ec; }
-
 .theme-vintage .tab:selected { -fx-background-color: #d3cedf; }
-.theme-vintage .tab:selected:tab-index0 { -fx-background-color: #f2d7d9; }
+.theme-vintage .tab:selected .tab-label { -fx-text-fill: #748da6; }
 .theme-vintage .table-view .column-header { -fx-background-color: #ffffff; -fx-border-color: #d3cedf; }
 .theme-vintage .table-view .column-header .label { -fx-text-fill: #748da6; }
 .theme-vintage .table-row-cell { -fx-background-color: #ffffff; -fx-border-color: #f7f5f8; }
 .theme-vintage .table-row-cell:hover { -fx-background-color: #f7f5f8; }
 .theme-vintage .table-row-cell:filled:selected { -fx-background-color: #d3cedf; }
-
-/* --- ТЁМНЫЙ БЛОК (Авто-удаление белых пятен) --- */
+/* --- ТЁМНЫЙ БЛОК (ИСПРАВЛЕНА КРИТИЧЕСКАЯ ОШИБКА СИНТАКСИСА С ТОЧКОЙ) --- */
 .theme-cyber, .theme-sambucus, .theme-mint, .theme-viper, .theme-succulent, .theme-beetle,
 .theme-samhain, .theme-halloween, .theme-syrup, .theme-spooky, .theme-shimmer, .theme-mist, .theme-purple {
-    -fx-background-color: #121212;
+-fx-background-color: #16161a !important;
 }
-.theme-cyber .menu-bar, .theme-sambucus .menu-bar, .theme-mint .menu-bar, .theme-viper .menu-bar, .theme-succulent .menu-bar, .theme-beetle .menu-bar,
-.theme-samhain .menu-bar, .theme-halloween .menu-bar, .theme-syrup .menu-bar, .theme-spooky .menu-bar, .theme-shimmer .menu-bar, .theme-mist .menu-bar, .theme-purple .menu-bar {
-    -fx-background-color: #121212; -fx-border-color: #2a2a2a;
+/* Тёмная панель меню */
+.theme-cyber .menu-bar, .theme-sambucus .menu-bar, .theme-mint .menu-bar, .theme-viper .menu-bar,
+.theme-succulent .menu-bar, .theme-beetle .menu-bar, .theme-samhain .menu-bar, .theme-halloween .menu-bar,
+.theme-syrup .menu-bar, .theme-spooky .menu-bar, .theme-shimmer .menu-bar, .theme-mist .menu-bar, .theme-purple .menu-bar {
+-fx-background-color: #16161a !important;
+-fx-border-color: #24242e !important;
 }
-.theme-cyber .tab-header-background, .theme-sambucus .tab-header-background, .theme-mint .tab-header-background, .theme-viper .tab-header-background, .theme-succulent .tab-header-background, .theme-beetle .tab-header-background,
-.theme-samhain .tab-header-background, .theme-halloween .tab-header-background, .theme-syrup .tab-header-background, .theme-spooky .tab-header-background, .theme-shimmer .tab-header-background, .theme-mist .tab-header-background, .theme-purple .tab-header-background {
-    -fx-background-color: #121212; -fx-border-color: #2a2a2a;
+.theme-cyber .menu-bar .menu .label, .theme-sambucus .menu-bar .menu .label, .theme-mint .menu-bar .menu .label,
+.theme-viper .menu-bar .menu .label, .theme-succulent .menu-bar .menu .label, .theme-beetle .menu-bar .menu .label,
+.theme-samhain .menu-bar .menu .label, .theme-halloween .menu-bar .menu .label, .theme-syrup .menu-bar .menu .label,
+.theme-spooky .menu-bar .menu .label, .theme-shimmer .menu-bar .menu .label, .theme-mist .menu-bar .menu .label,
+.theme-purple .menu-bar .menu .label {
+-fx-text-fill: #e2e8f0 !important;
 }
+/* Тёмная подложка вкладок */
+.theme-cyber .tab-pane .tab-header-area .tab-header-background,
+.theme-sambucus .tab-pane .tab-header-area .tab-header-background,
+.theme-mint .tab-pane .tab-header-area .tab-header-background,
+.theme-viper .tab-pane .tab-header-area .tab-header-background,
+.theme-succulent .tab-pane .tab-header-area .tab-header-background,
+.theme-beetle .tab-pane .tab-header-area .tab-header-background,
+.theme-samhain .tab-pane .tab-header-area .tab-header-background,
+.theme-halloween .tab-pane .tab-header-area .tab-header-background,
+.theme-syrup .tab-pane .tab-header-area .tab-header-background,
+.theme-spooky .tab-pane .tab-header-area .tab-header-background,
+.theme-shimmer .tab-pane .tab-header-area .tab-header-background,
+.theme-mist .tab-pane .tab-header-area .tab-header-background,
+.theme-purple .tab-pane .tab-header-area .tab-header-background {
+-fx-background-color: #16161a !important;
+-fx-border-color: #24242e !important;
+}
+/* Тёмные неактивные вкладки */
 .theme-cyber .tab, .theme-sambucus .tab, .theme-mint .tab, .theme-viper .tab, .theme-succulent .tab, .theme-beetle .tab,
 .theme-samhain .tab, .theme-halloween .tab, .theme-syrup .tab, .theme-spooky .tab, .theme-shimmer .tab, .theme-mist .tab, .theme-purple .tab {
-    -fx-background-color: #222222; -fx-border-color: #121212;
+-fx-background-color: #24242e !important;
+-fx-border-color: transparent !important;
 }
-.theme-cyber .table-view, .theme-sambucus .table-view, .theme-mint .table-view, .theme-viper .table-view, .theme-succulent .table-view, .theme-beetle .table-view,
-.theme-samhain .table-view, .theme-halloween .table-view, .theme-syrup .table-view, .theme-spooky .table-view, .theme-shimmer .table-view, .theme-mist .table-view, .theme-purple .table-view {
-    -fx-background-color: #121212;
+.theme-cyber .tab .tab-label, .theme-sambucus .tab .tab-label, .theme-mint .tab .tab-label, .theme-viper .tab .tab-label,
+.theme-succulent .tab .tab-label, .theme-beetle .tab .tab-label, .theme-samhain .tab .tab-label, .theme-halloween .tab .tab-label,
+.theme-syrup .tab .tab-label, .theme-spooky .tab .tab-label, .theme-shimmer .tab .tab-label, .theme-mist .tab .tab-label,
+.theme-purple .tab .tab-label {
+-fx-text-fill: #94a1b2 !important;
 }
-.theme-cyber .table-row-cell, .theme-sambucus .table-row-cell, .theme-mint .table-row-cell, .theme-viper .table-row-cell, .theme-succulent .table-row-cell, .theme-beetle .table-row-cell,
-.theme-samhain .table-row-cell, .theme-halloween .table-row-cell, .theme-syrup .table-row-cell, .theme-spooky .table-row-cell, .theme-shimmer .table-row-cell, .theme-mist .table-row-cell, .theme-purple .table-row-cell {
-    -fx-background-color: #1a1a1a; -fx-border-color: #2a2a2a;
+/* Стилизация таблиц в тёмных режимах (Перекрас ячеек) */
+.theme-cyber .table-view, .theme-sambucus .table-view, .theme-mint .table-view, .theme-viper .table-view,
+.theme-succulent .table-view, .theme-beetle .table-view, .theme-samhain .table-view, .theme-halloween .table-view,
+.theme-syrup .table-view, .theme-spooky .table-view, .theme-shimmer .table-view, .theme-mist .table-view, .theme-purple .table-view {
+-fx-background-color: #16161a !important;
 }
-.theme-cyber .table-row-cell .text, .theme-sambucus .table-row-cell .text, .theme-mint .table-row-cell .text, .theme-viper .table-row-cell .text, .theme-succulent .table-row-cell .text, .theme-beetle .table-row-cell .text,
-.theme-samhain .table-row-cell .text, .theme-halloween .table-row-cell .text, .theme-syrup .table-row-cell .text, .theme-spooky .table-row-cell .text, .theme-shimmer .table-row-cell .text, .theme-mist .table-row-cell .text, .theme-purple .table-row-cell .text {
-    -fx-fill: #ffffff;
+.theme-cyber .table-row-cell, .theme-sambucus .table-row-cell, .theme-mint .table-row-cell, .theme-viper .table-row-cell,
+.theme-succulent .table-row-cell, .theme-beetle .table-row-cell, .theme-samhain .table-row-cell, .theme-halloween .table-row-cell,
+.theme-syrup .table-row-cell, .theme-spooky .table-row-cell, .theme-shimmer .table-row-cell, .theme-mist .table-row-cell, .theme-purple .table-row-cell {
+-fx-background-color: #16161a !important;
+-fx-border-color: transparent transparent #24242e transparent !important;
 }
-
-.theme-cyber { -fx-background-color: #021826; }
-.theme-cyber .table-view { -fx-background-color: #021826; }
-.theme-cyber .menu-bar .menu .label { -fx-text-fill: #06f284; }
-.theme-cyber .tab:selected { -fx-background-color: #5c1966; }
-.theme-cyber .tab:selected:tab-index0 { -fx-background-color: #eaf405; }
-.theme-cyber .table-view .column-header { -fx-background-color: #01595a; -fx-border-color: #06f284; }
-.theme-cyber .table-view .column-header .label { -fx-text-fill: #9bff6c; }
-.theme-spooky { -fx-background-color: #1a1a1a; }
-.theme-spooky .table-view { -fx-background-color: #1a1a1a; }
-.theme-spooky .menu-bar .menu .label { -fx-text-fill: #e8641c; }
-.theme-spooky .tab:selected { -fx-background-color: #5b2c82; }
-.theme-spooky .tab:selected:tab-index0 { -fx-background-color: #e8641c; }
-.theme-spooky .table-view .column-header { -fx-background-color: #333333; -fx-border-color: #5b2c82; }
-.theme-spooky .table-view .column-header .label { -fx-text-fill: #7fd13b; }
+.theme-cyber .table-view .column-header, .theme-sambucus .table-view .column-header, .theme-mint .table-view .column-header,
+.theme-viper .table-view .column-header, .theme-succulent .table-view .column-header, .theme-beetle .table-view .column-header,
+.theme-samhain .table-view .column-header, .theme-halloween .table-view .column-header, .theme-syrup .table-view .column-header,
+.theme-spooky .table-view .column-header, .theme-shimmer .table-view .column-header, .theme-mist .table-view .column-header,
+.theme-purple .table-view .column-header {
+-fx-background-color: #24242e !important;
+-fx-border-color: #16161a !important;
+}
+.theme-cyber .table-view .column-header .label, .theme-sambucus .table-view .column-header .label, .theme-mint .table-view .column-header .label,
+.theme-viper .table-view .column-header .label, .theme-succulent .table-view .column-header .label, .theme-beetle .table-view .column-header .label,
+.theme-samhain .table-view .column-header .label, .theme-halloween .table-view .column-header .label, .theme-syrup .table-view .column-header .label,
+.theme-spooky .table-view .column-header .label, .theme-shimmer .table-view .column-header .label, .theme-mist .table-view .column-header .label,
+.theme-purple .table-view .column-header .label {
+-fx-text-fill: #fffffe !important;
+}
+/* Жесткий фикс цвета текста внутри ячеек таблиц и оберток Text в темных темах */
+.theme-cyber .table-view .table-cell, .theme-sambucus .table-view .table-cell, .theme-mint .table-view .table-cell, .theme-viper .table-view .table-cell,
+.theme-succulent .table-view .table-cell, .theme-beetle .table-view .table-cell, .theme-samhain .table-view .table-cell, .theme-halloween .table-view .table-cell,
+.theme-syrup .table-view .table-cell, .theme-spooky .table-view .table-cell, .theme-shimmer .table-view .table-cell, .theme-mist .table-view .table-cell, .theme-purple .table-view .table-cell,
+.theme-cyber .table-row-cell .text, .theme-sambucus .table-row-cell .text, .theme-mint .table-row-cell .text,
+.theme-viper .table-row-cell .text, .theme-succulent .table-row-cell .text, .theme-beetle .table-row-cell .text,
+.theme-samhain .table-row-cell .text, .theme-halloween .table-row-cell .text, .theme-syrup .table-row-cell .text,
+.theme-spooky .table-row-cell .text, .theme-shimmer .table-row-cell .text, .theme-mist .table-row-cell .text,
+.theme-purple .table-row-cell .text {
+-fx-text-fill: #fffffe !important;
+-fx-fill: #fffffe !important;
+}
+/* Индивидуальные цветовые акценты выбранных вкладок */
+.theme-cyber .tab:selected { -fx-background-color: #ff007f !important; }
+.theme-cyber .tab:selected .tab-label { -fx-text-fill: #ffffff !important; }
+.theme-spooky .tab:selected { -fx-background-color: #e8641c !important; }
+.theme-spooky .tab:selected .tab-label { -fx-text-fill: #ffffff !important; }
+/* ==========================================================================
+7. СТИЛИЗАЦИЯ ДЛЯ ФОРМЫ ДОБАВЛЕНИЯ ТОВАРА (ОБЕСПЕЧЕНИЕ КРАСОТЫ ОКНА)
+========================================================================== /
+.label {
+-fx-text-fill: inherit; / Метки наследуют цвет темы root /
+}
+/ Перенос цвета на метки модального окна в темных темах */
+.theme-cyber .label, .theme-sambucus .label, .theme-mint .label, .theme-viper .label,
+.theme-succulent .label, .theme-beetle .label, .theme-samhain .label, .theme-halloween .label,
+.theme-syrup .label, .theme-spooky .label, .theme-shimmer .label, .theme-mist .label, .theme-purple .label {
+-fx-text-fill: #fffffe !important;
+}
+/* Красивое оформление полей ввода, комбобоксов и кнопок */
+.text-field, .text-area, .combo-box, .date-picker {
+-fx-background-color: #ffffff;
+-fx-border-color: #dcd6d6;
+-fx-border-radius: 4px;
+-fx-background-radius: 4px;
+-fx-padding: 4px;
+}
+.theme-cyber .text-field, .theme-cyber .text-area, .theme-cyber .combo-box, .theme-cyber .date-picker,
+.theme-spooky .text-field, .theme-spooky .text-area, .theme-spooky .combo-box, .theme-spooky .date-picker,
+.theme-halloween .text-field, .theme-halloween .text-area, .theme-halloween .combo-box, .theme-halloween .date-picker {
+-fx-background-color: #24242e;
+-fx-border-color: #4a4a5a;
+-fx-text-inner-color: #fffffe;
+}
+.combo-box .list-cell {
+-fx-text-fill: #333333;
+}
+.theme-cyber .combo-box .list-cell, .theme-spooky .combo-box .list-cell {
+-fx-text-fill: #fffffe;
+}

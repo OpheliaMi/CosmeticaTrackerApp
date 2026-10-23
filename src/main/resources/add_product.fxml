@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,6 +17,13 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
+
+    <columnConstraints>
+        <!-- Первая колонка с текстовыми метками: жестко выделяем 110 пикселей, чтобы слова влазили целиком -->
+        <ColumnConstraints minWidth="110.0" prefWidth="110.0" hgrow="NEVER" />
+        <!-- Вторая колонка с полями ввода: занимает всё оставшееся место -->
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
 
     <Label text="Название:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
     <TextField fx:id="nameField" promptText="Например, Помада Черничная 💄" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.hgrow="ALWAYS"/>
